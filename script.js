@@ -108,7 +108,7 @@ const jump = () => PLAYER.jumping === '' && (PLAYER.jumping = 'up');
 const getValuePx = (element, prop) => parseInt(element.style[prop].replace('px', ''));
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.addEventListener('keyup', () => event.keyCode === 32 && jump());
+    document.addEventListener('keydown', () => event.keyCode === 32 && jump());
     document.addEventListener('click', () => !document.body.classList.contains('game-over') && jump());
     document.getElementById('play').addEventListener('click', (evt) => { evt.preventDefault(); evt.stopPropagation(); restart(); });
     setTimeout(() => PLAYER.classList.remove('player-start'), 250);
