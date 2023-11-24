@@ -10,6 +10,7 @@
   --score-color: rgba(255, 255, 255, 0.9);
   --level-color: rgba(255, 255, 255, 0.9);
   --player-color: rgb(195, 195, 195, 1);
+  --eyes-dead-color: rgba(255, 255, 255, 1);
 }
 * { user-select: none; }
 .border-radius-4 { border-radius: 4px; }
@@ -20,8 +21,12 @@
 .flex-column-center { justify-content: center; flex-direction: column; align-items: center; }
 .float-left { float: left; }
 .font-brush-script-mt { font-family: 'Brush Script MT', cursive; }
+.h-auto { height: auto; }
+.h-53 { height: 53px; }
 .left-100 { left: 100%; }
 .left-0 { left: 0; }
+.left-22 { left: 22px; }
+.left-4 { left: 4px; }
 .justify-content-center { justify-content: center; }
 .m-0 { margin: 0; }
 .margin-auto { margin: auto; }
@@ -34,12 +39,15 @@
 .pt-1 { padding-top: 1rem; }
 .right-0 { right: 0; }
 .top-0 { top: 0; }
+.top-12 { top: 12px; }
 .transition-left-1s { transition: left 1s ease-in-out; }
 .wh-100 { width: 100%; height: 100%; }
 .wh-10 { width: 5px; height: 6px; }
+.w-36 { width: 36px; }
 .z-index-0 { z-index: 0; }
 .z-index-1 { z-index: 1; }
-
+.visible-hide { visibility: hidden; }
+body.game-over .eyes-dead { visibility: visible; }
 .cloud { font-size: 80px; color: var(--cloud-color); left: -80px; }
 .moon { right: 1em; font-size: 3em; color: var(--moon-color); rotate: 45deg; }
 .player-start { left: -20px!important; }
@@ -53,6 +61,10 @@
 #player { background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAwCAYAAABT9ym6AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsAAAA7AAWrWiQkAAAE7SURBVGhD7ZZBDoIwEEVBTuIZdMvCC7jjViQQrkFYcAMT1t7BldfQ1LQGG7Qt006HOi9pagoJ8+f/AfMMmWmaHvInmLIs3/Xv5L55khGCEi2fcfpGNCHzfPsQyjNCjWRmhKNFDRZCDRZCDZKv3/lX3xZ2xAXfH8Qlx9gRF2wdWTMbip14CMZ/odAEi1ZVVQfMJuXqQRBbFdCiQdGS++ZJ5621FAdbizHyb1tL2tESnf7VbdP1tYjui9V13VEeWcPDHpK+76/KHXlkZHHYY+FSuA5HixrJCPnIZOx5gcxIdCGQ4uekGS0FpjPsiIaxG6Hcadv2JPZhGC6vAyDRhPiKlOJ/oqUDcci3C3OcHQlZDATv0arrei9W0zRneYSCdyHjON7EKoriLo9QWBUTfU5McVP3k5oRqiQiJMueIMCGRHvHT3IAAAAASUVORK5CYII=');}
 #score { color: var(--score-color); left: 0.5em; top: 0.5em; }
 #level { color: var(--level-color); right: 0.5em; top: 0.5em; }
+#head { top: -30px; left: 18px; }
+.eyes-dead { color: var(--eyes-dead-color); }
+body.game-over #head { rotate: 24deg; left: 22px; }
+body:not(.game-over) #head { animation: moving-head-ani .25s linear infinite; }
 body:not(.game-over) #back{ animation: back-ani 20s linear infinite; }
 body:not(.game-over) #floor{ animation: floor-ani 5s linear infinite; }
 body:not(.game-over) #foot-back { animation: moving-foot-ani .25s linear infinite; }
@@ -67,3 +79,4 @@ button { background-color: var(--button-background-color); border: 0; padding: 0
 @keyframes moving-cloud-inv-ani{0%{left: 100%;} 100%{left: -80px;}  }
 @keyframes moving-foot-ani{0%{bottom: -6px;} 50%{bottom: 0px;} 100%{bottom: -6px;}  }
 @keyframes moving-foot-inv-ani{0%{bottom: 0px;} 50%{bottom: -6px;} 100%{bottom: 0px;}  }
+@keyframes moving-head-ani{ 0%{transform: translateY(0px); top: -26px;} 50%{transform: translateY(-4px); top: -26px;} 100%{transform: translateY(0px); top: -26px;} }
