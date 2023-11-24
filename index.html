@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>T-Rex Game Clone</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="d-flex flex-column-center m-0 p-0 pt-1">
+    <div id="board" class="position-relative overflow-hidden margin-auto border-radius-4">
+      <div class="position-absolute moon z-index-0 top-0">&#9789;</div>
+      <div class="position-absolute transition-left-1s player-start z-index-1" id="player">
+        <div class="wh-100 position-relative">
+          <div id="foot-back" class="position-absolute wh-10 left-0"></div>
+          <div id="foot-front" class="position-absolute wh-10 right-0"></div>
+        </div>
+      </div>
+      <div class="position-absolute" id="score"></div>
+      <div class="position-absolute" id="level"></div>
+      <div class="position-absolute bottom-0" id="floor"></div>
+      <div class="position-absolute" id="back"></div>
+    </div>
+    <div id="game-over" class="position-absolute flex-column-center d-none">
+      <h1 class="mt-0 mb-05">
+        <span class="font-brush-script-mt ">Game Over</span>
+      </h1>
+      <button class="border-radius-4 cursor-pointer" id="play">play</button>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
