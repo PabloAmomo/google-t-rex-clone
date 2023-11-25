@@ -7,7 +7,6 @@ const PHYSICS = { jumpDown: -4, jumpHeight: 80, jumpStep: 5, increaseSpeed: 0.25
 const BOARD_PROPS = { width: 600, height: 200 };
 const PLAYER_PROPS = { left: 60, width: 50, height: 48, bottom: 10 };
 const OBSTACLE_PROPS = { left: BOARD_PROPS.width + 40, width: 40, height: 40, bottom: 6, 'font-size': '40px', 'line-height': '40px' };
-const OBSTACLES = [];
 const OBSTACLES_TYPES = [{ ...OBSTACLE_PROPS }, { ...OBSTACLE_PROPS, width: 50, height: 50, 'font-size': '50px', 'line-height': '50px' }];
 const SYMBOLS = { cloud: '&#9729;', obstacle: '&#127797;' };
 const CUSTOM_HEAD = '';
@@ -25,8 +24,9 @@ const handleObstacles = () => {
   if (GAME_STATE.obstacles.length === 0 || (lastLeft < BOARD_PROPS.width / 2 && Math.random() * lastLeft < BOARD_PROPS.width / 8)) addObstacle();
 
   GAME_STATE.obstacles = GAME_STATE.obstacles.filter((obstacle) => { 
-    if (obstacle.left() <= -obstacle.width()) { BOARD.removeChild(obstacle); return false; }
-    return true;
+    const removed = (obstacle.left() <= -obstacle.width());
+    if (removed) { BOARD.removeChild(obstacle); }
+    return !removed;
   });
   
   for (let i = 0; i < GAME_STATE.obstacles.length; i++) {
@@ -81,9 +81,10 @@ const restart = () => {
 };
 
 const setProps = (element, props) => {
-  const pxType = ['left', 'width', 'height', 'bottom'];
-  pxType.forEach((prop) => (element[prop] = () => getValuePx(element, prop)));
-  Object.entries(props).forEach(([prop, value]) => (element.style[prop] = pxType.includes(prop) ? value + 'px' : value));
+  Object.entries(props).forEach(([prop, value]) => {
+    element[prop] = () => getValuePx(element, prop);
+    element.style[prop] = ['left', 'width', 'height', 'bottom'].includes(prop) ? value + 'px' : value;
+  });
 };
 
 const createEl = (classList, addToEl, props, innerHTML) => {
@@ -97,21 +98,20 @@ const createEl = (classList, addToEl, props, innerHTML) => {
 
 const completeWithZero = (number, length) => number.toString().padStart(length, '0');
 const removeEl = (qSelector) => document.querySelectorAll(qSelector).forEach((el) => el.parentNode.removeChild(el));
-const jump = () => PLAYER.jumping === '' && (PLAYER.jumping = 'up');
 const getValuePx = (element, prop) => parseInt(element.style[prop].replace('px', ''));
 const addObstacle = () => GAME_STATE.obstacles.push(createEl(['position-absolute', 'obstacle', 'd-flex', 'justify-content-center'], BOARD, OBSTACLES_TYPES[Math.floor(Math.random() * OBSTACLES_TYPES.length)], SYMBOLS.obstacle));
 const setMove = (element, prop, value, setValue) => element.style[prop] = (setValue ? value : getValuePx(element, prop) + value) + 'px';
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.addEventListener('keydown', () => event.keyCode === 32 && jump());
-    document.addEventListener('click', () => !document.body.classList.contains('game-over') && jump());
-    document.getElementById('play').addEventListener('click', (evt) => { evt.preventDefault(); evt.stopPropagation(); restart(); });
-    setTimeout(() => PLAYER.classList.remove('player-start'), 250);
-    [[50, `${Math.floor(BOARD_PROPS.width * 0.75)}`], [20, `${Math.floor(BOARD_PROPS.width * 0.5)}`],  [-20, `${Math.floor(BOARD_PROPS.width * 0.25)}`], [35, `${Math.floor(BOARD_PROPS.width * 0.05)}`]].forEach((item) => addCloud(item[0] + 'px', 'var(--cloud-color-foreground)', 0, item[1]));
-    [[-30, 50], [15, 20], [65, 35], [-22, 16, true], [28, 35, true], [58, 22, true]].forEach((item) => addCloud(item[0] + 'px', 'var(--cloud-color)', item[1], null, item?.[2]));
-    if (CUSTOM_HEAD !== '') {
-      document.getElementById('head').querySelector('img').src = CUSTOM_HEAD;
-      document.getElementById('head').classList.remove('d-none');
-    }
-    restart();
-  }, false);
+  const jump = () => PLAYER.jumping === '' && (PLAYER.jumping = 'up');
+  document.addEventListener('keydown', () => event.keyCode === 32 && jump());
+  document.addEventListener('click', () => !document.body.classList.contains('game-over') && jump());
+  document.getElementById('play').addEventListener('click', (evt) => { evt.preventDefault(); evt.stopPropagation(); restart(); });
+  [[50, `${Math.floor(BOARD_PROPS.width * 0.75)}`], [20, `${Math.floor(BOARD_PROPS.width * 0.5)}`],  [-20, `${Math.floor(BOARD_PROPS.width * 0.25)}`], [35, `${Math.floor(BOARD_PROPS.width * 0.05)}`]].forEach((item) => addCloud(item[0] + 'px', 'var(--cloud-color-foreground)', 0, item[1]));
+  [[-30, 50], [15, 20], [65, 35], [-22, 16, true], [28, 35, true], [58, 22, true]].forEach((item) => addCloud(item[0] + 'px', 'var(--cloud-color)', item[1], null, item?.[2]));
+  if (CUSTOM_HEAD !== '') {
+    document.getElementById('head').querySelector('img').src = CUSTOM_HEAD;
+    document.getElementById('head').classList.remove('d-none');
+  }
+  restart();
+}, false);
