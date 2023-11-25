@@ -20,7 +20,7 @@ const loop = () => {
 };
 
 const handleObstacles = () => {
-  const lastLeft = GAME_STATE.obstacles.length && GAME_STATE.obstacles[GAME_STATE.obstacles.length - 1].left();
+  const lastLeft = GAME_STATE.obstacles.slice(-1)[0]?.left();
   if (GAME_STATE.obstacles.length === 0 || (lastLeft < BOARD_PROPS.width / 2 && Math.random() * lastLeft < BOARD_PROPS.width / 8)) addObstacle();
 
   GAME_STATE.obstacles = GAME_STATE.obstacles.filter((obstacle) => { 
