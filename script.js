@@ -75,7 +75,7 @@ const restart = () => {
   document.getElementById('score').innerText = completeWithZero(0, 5);
   document.getElementById('level').innerText = 'Level ' + completeWithZero(Math.floor(GAME_STATE.acceleration) + 1, 3);
   PLAYER.jumping = '';
-  [[PLAYER, PLAYER_PROPS], [BOARD, BOARD_PROPS], [GAME_OVER, BOARD_PROPS]].forEach((item) => setProps(...item));
+  [[PLAYER, PLAYER_PROPS], [BOARD, BOARD_PROPS]].forEach((item) => setProps(...item));
   removeEl('.obstacle');
   OBSTACLES.length = 0;
   document.body.classList.remove('game-over');
