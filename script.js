@@ -1,6 +1,7 @@
 const BOARD = document.getElementById('board');
 const PLAYER = document.getElementById('player');
 const FLOOR = document.getElementById('floor');
+const GAME_OVER = document.getElementById('game-over');
 const GAME_STATE = { isGameOver: false, score: 0, acceleration: 0 };
 const PHYSICS = { jumpDown: -4, jumpHeight: 80, jumpStep: 5, increaseSpeed: 0.25, speed: 5 };
 const BOARD_PROPS = { width: 600, height: 200 };
@@ -16,9 +17,9 @@ const CUSTOM_HEAD =
 
 const loop = () => {
   if (!GAME_STATE.isGameOver) {
+    window.requestAnimationFrame(loop);
     handleObstacles();
     if (PLAYER.jumping !== '' && !GAME_STATE.isGameOver) handleJumping();
-    window.requestAnimationFrame(loop);
   }
 };
 
@@ -74,7 +75,7 @@ const restart = () => {
   document.getElementById('score').innerText = completeWithZero(0, 5);
   document.getElementById('level').innerText = 'Level ' + completeWithZero(Math.floor(GAME_STATE.acceleration) + 1, 3);
   PLAYER.jumping = '';
-  [[PLAYER, PLAYER_PROPS], [BOARD, BOARD_PROPS]].forEach((item) => setProps(...item));
+  [[PLAYER, PLAYER_PROPS], [BOARD, BOARD_PROPS], [GAME_OVER, BOARD_PROPS]].forEach((item) => setProps(...item));
   removeEl('.obstacle');
   OBSTACLES.length = 0;
   document.body.classList.remove('game-over');
