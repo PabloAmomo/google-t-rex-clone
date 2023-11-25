@@ -38,6 +38,8 @@
 .position-relative { position: relative; }
 .pt-1 { padding-top: 1rem; }
 .right-0 { right: 0; }
+.rt-05 { right: 0.5rem; top: 0.5rem; }
+.lt-05 { left: 0.5rem; top: 0.5rem; }
 .top-0 { top: 0; }
 .top-12 { top: 12px; }
 .transition-left-1s { transition: left 1s ease-in-out; }
@@ -60,9 +62,9 @@
 #foot-front { left: 26px; }
 #game-over span { color: var(--game-over-text-color); }
 #head { top: -30px; left: 18px; }
-#level { color: var(--level-color); right: 0.5em; top: 0.5em; }
+#level { color: var(--level-color); }
 #player { background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAwCAYAAABT9ym6AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsAAAA7AAWrWiQkAAAE7SURBVGhD7ZZBDoIwEEVBTuIZdMvCC7jjViQQrkFYcAMT1t7BldfQ1LQGG7Qt006HOi9pagoJ8+f/AfMMmWmaHvInmLIs3/Xv5L55khGCEi2fcfpGNCHzfPsQyjNCjWRmhKNFDRZCDRZCDZKv3/lX3xZ2xAXfH8Qlx9gRF2wdWTMbip14CMZ/odAEi1ZVVQfMJuXqQRBbFdCiQdGS++ZJ5621FAdbizHyb1tL2tESnf7VbdP1tYjui9V13VEeWcPDHpK+76/KHXlkZHHYY+FSuA5HixrJCPnIZOx5gcxIdCGQ4uekGS0FpjPsiIaxG6Hcadv2JPZhGC6vAyDRhPiKlOJ/oqUDcci3C3OcHQlZDATv0arrei9W0zRneYSCdyHjON7EKoriLo9QWBUTfU5McVP3k5oRqiQiJMueIMCGRHvHT3IAAAAASUVORK5CYII=');}
-#score { color: var(--score-color); left: 0.5em; top: 0.5em; }
+#score { color: var(--score-color); }
 body:not(.game-over) #back{ animation: back-ani 20s linear infinite; }
 body:not(.game-over) #floor{ animation: floor-ani 5s linear infinite; }
 body:not(.game-over) #foot-back { animation: moving-foot-ani .25s linear infinite; }
