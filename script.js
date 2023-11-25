@@ -107,11 +107,11 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', () => event.keyCode === 32 && jump());
   document.addEventListener('click', () => !document.body.classList.contains('game-over') && jump());
   document.getElementById('play').addEventListener('click', (evt) => { evt.preventDefault(); evt.stopPropagation(); restart(); });
-  [[50, `${Math.floor(BOARD_PROPS.width * 0.75)}`], [20, `${Math.floor(BOARD_PROPS.width * 0.5)}`],  [-20, `${Math.floor(BOARD_PROPS.width * 0.25)}`], [35, `${Math.floor(BOARD_PROPS.width * 0.05)}`]].forEach((item) => addCloud(item[0] + 'px', 'var(--cloud-color-foreground)', 0, item[1]));
-  [[-30, 50], [15, 20], [65, 35], [-22, 16, true], [28, 35, true], [58, 22, true]].forEach((item) => addCloud(item[0] + 'px', 'var(--cloud-color)', item[1], null, item?.[2]));
   if (CUSTOM_HEAD !== '') {
     document.getElementById('head').querySelector('img').src = CUSTOM_HEAD;
     document.getElementById('head').classList.remove('d-none');
   }
+  [[50, `${Math.floor(BOARD_PROPS.width * 0.75)}`], [20, `${Math.floor(BOARD_PROPS.width * 0.5)}`],  [-20, `${Math.floor(BOARD_PROPS.width * 0.25)}`], [35, `${Math.floor(BOARD_PROPS.width * 0.05)}`]].forEach((item) => addCloud(item[0] + 'px', 'var(--cloud-color-foreground)', 0, item[1]));
+  [[-30, 50], [15, 20], [65, 35], [-22, 16, true], [28, 35, true], [58, 22, true]].forEach((item) => addCloud(item[0] + 'px', 'var(--cloud-color)', item[1], null, item?.[2]));
   restart();
 }, false);
