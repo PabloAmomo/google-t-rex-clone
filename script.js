@@ -41,9 +41,9 @@ const handleObstacles = () => {
     }
 
     if (obstacle.left() < PLAYER.left() && !obstacle.scored) {
+      obstacle.scored = true;
       GAME_STATE.score += 100;
       GAME_STATE.acceleration += PHYSICS.increaseSpeed;
-      obstacle.scored = true;
       document.getElementById('score').innerText = completeWithZero(GAME_STATE.score, 5);
       document.getElementById('level').innerText = 'Level ' + completeWithZero(Math.floor(GAME_STATE.acceleration) + 1, 3);
     }
