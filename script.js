@@ -2,8 +2,8 @@ const BOARD = document.getElementById('board');
 const PLAYER = document.getElementById('player');
 const FLOOR = document.getElementById('floor');
 const GAME_OVER = document.getElementById('game-over');
-const GAME_STATE = { isGameOver: false, score: 0, acceleration: 0, obstacles: [] };
-const PHYSICS = { jumpDown: -4, jumpHeight: 80, jumpStep: 5, increaseSpeed: 0.25, speed: 5 };
+const GAME_STATE = { isGameOver: false, score: 0, acceleration: 0, obstacles: [], level: 1 };
+const PHYSICS = { increaseSpeed: 0.25, speed: 5, jumpMs: [50,45,40,35,30] };
 const BOARD_PROPS = { width: 600, height: 200 };
 const PLAYER_PROPS = { left: 60, width: 50, height: 48, bottom: 10 };
 const OBSTACLE_PROPS = { left: BOARD_PROPS.width + 40, width: 40, height: 40, bottom: 6, 'font-size': '40px', 'line-height': '40px' };
@@ -15,11 +15,7 @@ const CUSTOM_HEAD = '';
 
 const loop = () => {
   if (GAME_STATE.isGameOver) return; else window.requestAnimationFrame(loop);
-  if (PLAYER.jumping !== '') handleJumping();
-  handleObstacles();
-};
 
-const handleObstacles = () => {
   const lastLeft = GAME_STATE.obstacles.slice(-1)[0]?.left();
   if (GAME_STATE.obstacles.length === 0 || (lastLeft < BOARD_PROPS.width / 2 && Math.random() * lastLeft < BOARD_PROPS.width / 8)) addObstacle();
 
@@ -34,7 +30,7 @@ const handleObstacles = () => {
 
     setMove(obstacle, 'left', -(GAME_STATE.acceleration + PHYSICS.speed));
 
-    if (obstacle.left() >= PLAYER.left() && obstacle.left() <= PLAYER.left() + PLAYER.width() && PLAYER.jumping === '') {
+    if (obstacle.left() >= PLAYER.left() && obstacle.left() <= PLAYER.left() + PLAYER.width() && !PLAYER.jumping) {
       GAME_STATE.isGameOver = true;
       document.body.classList.add('game-over');
       return;
@@ -44,21 +40,8 @@ const handleObstacles = () => {
       obstacle.scored = true;
       GAME_STATE.score += 100;
       GAME_STATE.acceleration += PHYSICS.increaseSpeed;
-      document.getElementById('score').innerText = completeWithZero(GAME_STATE.score, 5);
-      document.getElementById('level').innerText = 'Level ' + completeWithZero(Math.floor(GAME_STATE.acceleration) + 1, 3);
-    }
-  }
-};
-
-const handleJumping = () => {
-  const speedPlus = PHYSICS.jumpStep + GAME_STATE.acceleration;
-  if (PLAYER.jumping === 'up' && PLAYER.bottom() < PHYSICS.jumpHeight + PLAYER_PROPS.bottom) setMove(PLAYER, 'bottom', speedPlus);
-  else {
-    PLAYER.jumping = 'down';
-    if (PLAYER.bottom() > PLAYER_PROPS.bottom) setMove(PLAYER, 'bottom', PLAYER.bottom() <= PHYSICS.jumpHeight / 2 ? -speedPlus : PHYSICS.jumpDown - GAME_STATE.acceleration);
-    else {
-      PLAYER.jumping = '';
-      setMove(PLAYER, 'bottom', PLAYER_PROPS.bottom, true);
+      GAME_STATE.level = Math.floor(GAME_STATE.acceleration) + 1;
+      updateStats();
     }
   }
 };
@@ -71,10 +54,9 @@ function addCloud(top, color = 'initial', speed = 0, left = 'auto', inv = false)
 const restart = () => {
   removeEl('.obstacle');
   GAME_STATE.obstacles.length = 0;
-  Object.assign(GAME_STATE, { isGameOver: false, score: 0, acceleration: 0, obstacles: [] });
-  document.getElementById('score').innerText = completeWithZero(0, 5);
-  document.getElementById('level').innerText = 'Level ' + completeWithZero(Math.floor(GAME_STATE.acceleration) + 1, 3);
-  PLAYER.jumping = '';
+  Object.assign(GAME_STATE, { isGameOver: false, score: 0, acceleration: 0, obstacles: [], level: 1 });
+  updateStats();
+  PLAYER.jumping = false;
   [[PLAYER, PLAYER_PROPS], [BOARD, BOARD_PROPS]].forEach((item) => setProps(...item));
   document.body.classList.remove('game-over');
   loop();
@@ -101,9 +83,14 @@ const removeEl = (qSelector) => document.querySelectorAll(qSelector).forEach((el
 const getValuePx = (element, prop) => parseInt(element.style[prop].replace('px', ''));
 const addObstacle = () => GAME_STATE.obstacles.push(createEl(['position-absolute', 'obstacle', 'd-flex', 'justify-content-center'], BOARD, OBSTACLES_TYPES[Math.floor(Math.random() * OBSTACLES_TYPES.length)], SYMBOLS.obstacle));
 const setMove = (element, prop, value, setValue) => element.style[prop] = (setValue ? value : getValuePx(element, prop) + value) + 'px';
+const updateStats = () => ['score', 'level'].forEach((item) => document.getElementById(item).innerText = completeWithZero(GAME_STATE[item], item === 'score' ? 5 : 3));
 
 document.addEventListener('DOMContentLoaded', () => {
-  const jump = () => PLAYER.jumping === '' && (PLAYER.jumping = 'up');
+  const jump = () => { 
+    if (PLAYER.jumping) return;
+    PLAYER.jumping = true; 
+    PLAYER.style.animation = `jumping-animation .${PHYSICS.jumpMs[(GAME_STATE.level <= PHYSICS.jumpMs.length ? GAME_STATE.level : PHYSICS.jumpMs.length) - 1]}s linear`
+  };
   document.addEventListener('keydown', () => event.keyCode === 32 && jump());
   document.addEventListener('click', () => !document.body.classList.contains('game-over') && jump());
   document.getElementById('play').addEventListener('click', (evt) => { evt.preventDefault(); evt.stopPropagation(); restart(); });
@@ -111,6 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('head').querySelector('img').src = CUSTOM_HEAD;
     document.getElementById('head').classList.remove('d-none');
   }
+  PLAYER.addEventListener('animationend', () => { PLAYER.classList.remove('initial'); }, { once: true });  
+  PLAYER.addEventListener('animationend', () => { PLAYER.style.animation = 'none'; PLAYER.jumping = false; });
   [[50, `${Math.floor(BOARD_PROPS.width * 0.75)}`], [20, `${Math.floor(BOARD_PROPS.width * 0.5)}`],  [-20, `${Math.floor(BOARD_PROPS.width * 0.25)}`], [35, `${Math.floor(BOARD_PROPS.width * 0.05)}`]].forEach((item) => addCloud(item[0] + 'px', 'var(--cloud-color-foreground)', 0, item[1]));
   [[-30, 50], [15, 20], [65, 35], [-22, 16, true], [28, 35, true], [58, 22, true]].forEach((item) => addCloud(item[0] + 'px', 'var(--cloud-color)', item[1], null, item?.[2]));
   restart();
